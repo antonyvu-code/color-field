@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050505" />
+    <title>Color Field — EXP.02 · Nullpunkt Lab</title>
+    <meta
+      name="description"
+      content="A WebGL color field experiment: one fullscreen triangle, one fragment shader. Domain-warped noise driven by scroll velocity. Built with OGL, GSAP and Lenis."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Color Field — EXP.02" />
+    <meta property="og:site_name" content="Nullpunkt Lab" />
+    <meta
+      property="og:description"
+      content="One triangle. One fragment shader. Every pixel computed from warped noise, stirred by your scroll."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": "Color Field — EXP.02",
+        "description": "WebGL fragment-shader color field experiment with scroll-driven uniforms.",
+        "creator": { "@type": "Organization", "name": "Nullpunkt" },
+        "keywords": "WebGL, GLSL, fragment shader, domain warping, OGL"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <canvas id="gl" aria-hidden="true"></canvas>
+
+    <div class="ticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <p class="eyebrow">Nullpunkt Lab — EXP.02</p>
+      <p class="mono-label site-header__index">Color&nbsp;Field</p>
+    </header>
+
+    <main id="main">
+      <section class="panel panel--hero" aria-labelledby="hero-title">
+        <h1 id="hero-title" class="display">Color Field</h1>
+        <p class="lede">
+          One fullscreen triangle. One fragment shader. Every pixel you see is
+          computed from warped noise — there is no image, no geometry, no
+          texture. Scroll to stir the field.
+        </p>
+        <p class="mono-label scroll-hint">Scroll to stir <span aria-hidden="true">&darr;</span></p>
+      </section>
+
+      <section class="panel" aria-labelledby="s1-title">
+        <p class="mono-label panel__index">01</p>
+        <h2 id="s1-title" class="display display--s">The canvas is a formula</h2>
+        <p>
+          Unlike EXP.01 — thousands of particles, each a tiny object — this
+          scene contains exactly one triangle stretched past the screen edges.
+          The GPU runs the fragment shader once per pixel, millions of times a
+          frame, and the entire painting is the return value of that function.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="s2-title">
+        <p class="mono-label panel__index">02</p>
+        <h2 id="s2-title" class="display display--s">Domain warping</h2>
+        <p>
+          The fluid look comes from feeding noise into itself:
+          <code>fbm(p&nbsp;+&nbsp;fbm(p&nbsp;+&nbsp;fbm(p)))</code>. Each layer
+          bends the coordinate space of the next, so flat noise starts to fold
+          like ink dropped in water.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="s3-title">
+        <p class="mono-label panel__index">03</p>
+        <h2 id="s3-title" class="display display--s">Scroll is a uniform</h2>
+        <p>
+          The page scroll doesn't move the canvas — it is piped into the shader
+          as data, every frame. Progress travels through the field; velocity
+          raises the warp amplitude, so fast scrolling literally stirs harder.
+        </p>
+        <dl class="readout mono-label">
+          <div><dt>uScroll</dt><dd id="ro-scroll">0.000</dd></div>
+          <div><dt>uVelocity</dt><dd id="ro-vel">0.000</dd></div>
+        </dl>
+      </section>
+
+      <section class="panel" aria-labelledby="s4-title">
+        <p class="mono-label panel__index">04</p>
+        <h2 id="s4-title" class="display display--s">The palette</h2>
+        <p>
+          Color comes from a cosine palette:
+          <code>a&nbsp;+&nbsp;b&nbsp;&middot;&nbsp;cos(2&pi;(c&middot;t&nbsp;+&nbsp;d))</code>.
+          Four small vectors define the whole mood of the piece — edit them in
+          <code>src/gl/shaders.ts</code> and the field becomes yours.
+        </p>
+      </section>
+
+      <footer class="panel panel--footer">
+        <p class="mono-label">Nullpunkt — EXP.02 &middot; OGL + GSAP + Lenis &middot; 2026</p>
+      </footer>
+    </main>
+
+    <aside class="telemetry mono-label" aria-hidden="true">
+      <span>FPS <b id="tel-fps">--</b></span>
+      <span>VEL <b id="tel-vel">0.00</b></span>
+      <span>SCR <b id="tel-scr">000%</b></span>
+      <span>DPR <b id="tel-dpr">-</b></span>
+    </aside>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
